@@ -16,12 +16,10 @@ headers = {
 session.headers.update(headers)
 
 cookies = readCookies()
-for cookie in cookies.items():
-    session.cookies.set(*cookie)
-
+session.cookies.update(cookies)
 
 response = session.get(url=url)
 print(session.headers)
 print(session.cookies)
-with open('s.html' ,'w') as t:
+with open('s.html', 'w') as t:
     t.write(str(response.text))
