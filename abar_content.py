@@ -1,11 +1,12 @@
 import requests
+from bs4 import BeautifulSoup
 import json
 
 
 def readCookies():
-    with open('cookies_browser.json', 'r') as cookies:
-        cookiesDict = json.load(cookies)
-    return cookiesDict['Request Cookies']
+    with open('cookies_browser.json', 'r') as file:
+        cookies = json.load(file)
+    return cookies['Request Cookies']
 
 
 session = requests.Session()
@@ -19,7 +20,11 @@ cookies = readCookies()
 session.cookies.update(cookies)
 
 response = session.get(url=url)
-print(session.headers)
-print(session.cookies)
-with open('s.html', 'w') as t:
-    t.write(str(response.text))
+print(f'Header is : {session.headers}')
+print('='*100)
+print(f'Sended cookies is : {session.cookies}')
+
+document = BeautifulSoup(response.text, 'html.parser')
+print('='*100)
+print(document.prettify())
+
