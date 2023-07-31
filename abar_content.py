@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 
 def readCookies():
@@ -10,12 +11,14 @@ def readCookies():
 
 
 class Classroom:
-    def __init__(self, tableRow) -> None:
-        tableData = tableRow.find_all('td')
-        self.name = name
-        self.date = date
-        self.time = time
-        self.subject = subject
+    def __init__(self, tableDatas) -> None:
+        self.name = tableDatas[1].get_text(strip=True)
+        dateTime = tableDatas[0].find('div').get_text(strip=True)
+        self.date = re.findall('.{2}\/.{2}\/.{2}', dateTime)[0]  # Find Date
+        self.time = re.findall('.{2}:.{2}$', dateTime)[
+            0]  # Find finishing time
+        tableDatas[0].div.decompose()
+        self.subject = tableDatas[0].get_text(strip=True)
 
 
 session = requests.Session()
@@ -41,7 +44,11 @@ print('='*100)
 tableRows = document.find_all('tr')
 tableRows = tableRows[1:]  # Remove header
 
+classes = list()
 for tr in tableRows:
     tableData = tr.find_all('td')
-    print(tableData)
-    print('=============================================================')
+    # print(tableData)
+    # print('=============================================================')
+    tableData[0].div.decompose()
+    print(tableData[0].get_text(strip=True))
+    # classes.append(Classroom(tableData))
