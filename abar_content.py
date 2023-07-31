@@ -20,6 +20,10 @@ class Classroom:
         tableDatas[0].div.decompose()
         self.subject = tableDatas[0].get_text(strip=True)
 
+    def content(self):
+        context = f'کلاس تدریس {self.subject} دانش آموز محترم {self.name} برگزار شد و در ساعت {self.time} تاریخ {self.date} به اتمام رسید و کلیه مطالب مشخص شده به خوبی آموزش دیده شد.'
+        return context
+
 
 session = requests.Session()
 
@@ -47,8 +51,10 @@ tableRows = tableRows[1:]  # Remove header
 classes = list()
 for tr in tableRows:
     tableData = tr.find_all('td')
-    # print(tableData)
-    # print('=============================================================')
-    tableData[0].div.decompose()
-    print(tableData[0].get_text(strip=True))
-    # classes.append(Classroom(tableData))
+    print(tableData)
+    print('='*50)
+    classes.append(Classroom(tableData))
+
+for object in classes:
+    print(object.content())
+    print('='*100)
