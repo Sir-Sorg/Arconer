@@ -5,14 +5,14 @@ import re
 
 
 def readCookies() -> dict:
-    with open('cookies_browser.json', 'r') as file:
+    with open('cookies.json', 'r') as file:
         cookies = json.load(file)
     return cookies['Request Cookies']
 
 
 def writeCookies(cookies: dict) -> None:
     jsonFormat = {'Request Cookies': cookies}
-    with open('cookies_browser.json', 'w') as file:
+    with open('cookies.json', 'w') as file:
         jsonFormat = json.dumps(jsonFormat)
         file.write(jsonFormat)
 
