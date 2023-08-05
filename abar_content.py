@@ -20,7 +20,7 @@ def writeCookies(cookies: dict) -> None:
 def loggin():
     global session
     global document
-    phone = '09391375798'
+    phone = 'PUT YOUR PHONE NUMBER HERE'
     print(f'Cookies was Expierd re-Enter Begining...\nSMS sends to "{phone}"')
     # B*tchs, you only used one input to verify your identity, you have to reach us
     csrfmiddlewaretoken = document.find('input', type='hidden', attrs={
