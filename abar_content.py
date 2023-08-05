@@ -58,9 +58,33 @@ if document.find('input', type='text', attrs={"name": "phone"}):
                'next': '/ppanel'}
     response = session.post(
         'https://code.abarkelas.ir/ppanel/login/', data=payload)
-    with open('s.html', 'w') as f:
-        f.write(response.text)
-    print(response.text)
+    document = BeautifulSoup(response.text, 'html.parser')
+
+    csrfmiddlewaretoken = document.find('input', type='hidden', attrs={
+        'name': 'csrfmiddlewaretoken'})
+    csrfmiddlewaretoken = csrfmiddlewaretoken['value']
+    pin_code = input(f'Enter SMS that Sended to "{phone}": ')
+
+    # What's wrong, why did you change the phone property to phone_number, Idiot? I was here for ten minutes
+    payload = {
+        'csrfmiddlewaretoken': csrfmiddlewaretoken,
+        'phone_number': phone,
+        'next': '/ppanel',
+        'pin_code': pin_code
+    }
+    response = session.post(
+        'https://code.abarkelas.ir/ppanel/verify/', data=payload)
+    print('='*100)
+    print(f'Sended payload is : {payload}')
+
+    document = BeautifulSoup(response.text, 'html.parser')
+    if document.find('div', id='tutor_name', class_='center aligned header'):
+        print('='*100)
+        print('You have Successfully logged in.')
+    else:
+        print('='*100)
+        print('You are "NOT logged in" You may have entered the code incorrectly')
+
 
 tableRows = document.find_all('tr')
 tableRows = tableRows[1:]  # Remove header
